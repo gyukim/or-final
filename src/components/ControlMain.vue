@@ -50,8 +50,6 @@ export default {
     }
   },mounted(){
     // this.doc_del_rendar();
-    this.changeBackground(nowDegree);
-    setInterval(()=>{this.setIntervalback();this.changeBackground(nowDegree);},1);
 
   }
 };
@@ -60,7 +58,7 @@ export default {
 <style scoped>
 #mainCon {
   height: 100%;
-  background-color:black;
+  background-color:linear-gradient( 90deg, white, black );
   
 }
 

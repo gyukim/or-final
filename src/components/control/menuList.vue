@@ -1,23 +1,18 @@
 <template>
     <div id = "menu">
+      
+      <div id="button-container" >
+<div  id="button-second">
+  <p v-on:click="emitEvent('down')">
+  BUTTON
+  </p>
+ <!-- <img v-on:click="emitEvent('down')" src = "../../assets/svg/right.svg"> -->
+</div>
+      </div>
       <div id="list-please-container">
       <p id="list-please">
 Concurrent Users {{connectNum}}
 </p>
-      </div>
-      <div id="button-container" >
-<div id="button-first">
-   <!-- <img  v-on:click="emitEvent('up')" src = "../../assets/svg/right.svg"> -->
-   <p v-on:click="emitEvent('up')" >
- +
- </p>
-</div>
-<div id="button-second">
-  <p v-on:click="emitEvent('down')">
-  -
-  </p>
- <!-- <img v-on:click="emitEvent('down')" src = "../../assets/svg/right.svg"> -->
-</div>
       </div>
     </div>
 </template>
@@ -35,11 +30,16 @@ export default {
   // this.gradientNum=data;
   // this.colorChangeAnimation(this.gradientNum);
 
+  },speedDisplayReceive:function(data){
+      this.buttonHeight=data*80/55;
+      document.querySelector('#button-container').style.top= this.buttonHeight+'%';
   }
   },
   data(){
     return{
-      gradientNum:0
+      gradientNum:0,
+      connectNum:1 ,
+      buttonHeight:0
     }
   },
 methods:{
@@ -51,12 +51,11 @@ methods:{
     },  emitEvent: function(data) {
       this.$socket.emit("speedControl", data);
       console.log("clicked");
-    }, colorChangeAnimation:function(e){
-  
-TweenMax.to("#button-container", 1, {backgroundImage:`linear-gradient(to top,${nowColor[0]},${nowColor[1]},${nowColor[2]})`, repeat:0});
+      console.log(this.buttonHeight);
     }
   },mounted(){
   // this.listpleaseAnimation();
+ this.emitEvent();
 
   },data(){
     return {
@@ -70,7 +69,7 @@ TweenMax.to("#button-container", 1, {backgroundImage:`linear-gradient(to top,${n
 #menu {
   display: flex;
   flex-direction: column;
-  height:92%;
+  height:100%;
 
 }
 a {
@@ -82,73 +81,34 @@ a:visited {
 a:hover {
   text-decoration: none;
 }
+
 #list-please-container{
-background-color:black;
-height:auto;
-
-}
-#list-please{
-color:white;
-
-  font-size: 1.5em;
-  font-weight: 500;
-  text-align: center;
- position: relative;
-  white-space: nowrap;
-  left:100%;
-  overflow:visible;
-  margin:5px;
-  text-transform: uppercase;
-  
+  margin-right:5vw;
+  text-align:right;
 }
 #list-link{
   color:black;
 
   
 }
-#button-first{
 
-height:40%;
-position:relative;
-  width:100%;
-  margin-top:20%;
-  text-align: center;
-
-}
-#button-first img{
-width:50%;
-}
-#button-second{
-display:block;
-position:relative;
-  width:100%;
-    text-align: center;
-
-}
-#button-second img{
-width:50%;
-filter: drop-shadow(0px 0px 8px #4444dd);
-}
 #button-container p{
-  filter: drop-shadow(0px 0px 8px #4444dd);
-  font-size:10em;
+  font-size:23.5vw;
+  margin:0;
+  font-family:matter,Arial, Helvetica, sans-serif;
+  font-weight:700;
 }
-#connectCap{
-  font-size:0.5em;
-  text-align :center;
-}
+
 #button-container{
 position:relative;
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
     -webkit-flex-direction: column;
-  -webkit-justify-content: center;
-  justify-content: center;
+ 
   -webkit-align-items: center;
   align-items: center; 
-     height:100%;
-    background-image: linear-gradient(to top, #000, #fff, #000, #fff, #000);
+     height:93%;
 
 
 }

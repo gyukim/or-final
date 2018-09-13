@@ -23,6 +23,7 @@ let theta={x:17};
 let nowConnect=0;
 var animationId;
 var setId;
+var reUp;
 // import displayTop from "./display/displayTop.vue";
 // import displayBot from "./display/displayBot.vue";
 import * as TWEEN from '@tweenjs/tween.js';
@@ -31,18 +32,22 @@ import eventBus from "../event";
 var imgArray = new Array();
 
 export default {
-  name: "DisplayMain",
+  name: "DisplayMain", 
+  
   components: {
     // displayTop: displayTop,
     // displayBot: displayBot
-  },sockets: {
+  },sockets: { connect: function() {
+      console.log("sockdddddet connected");
+      
+    },
     speedRecieve: function(data) {
       this.speedControl(data);
       
      
     }},
   data() {
-    return { moveSpeed:15, imageSrc: `/static/images/1_1.jpg`, imageSrc2: `/static/images/2_1.jpg`,
+    return { moveSpeed:70, imageSrc: `/static/images/1_1.jpg`, imageSrc2: `/static/images/2_1.jpg`,
     backimageId:"backImage"
     ,
     imageBright:1,
@@ -70,19 +75,20 @@ imgArray[i].src=`/static/images/${i}_1.jpg`
    cancelAnimationFrame( animationId );
   }, methods:{
     speedControl:function(e){
-     if(e=='up'){
-      this.moveSpeed+=0.05;
-        this.moveSpeed= Math.min(this.moveSpeed, 18);
-              console.log(this.moveSpeed);
-
-console.log("up")
-      }else if(e=='down'){
-      this.moveSpeed-=0.05;
-      this.moveSpeed= Math.max(this.moveSpeed, 12);
+if(e=='down'){
+      this.moveSpeed-=1;
+      this.moveSpeed= Math.max(this.moveSpeed, 15);
       console.log(this.moveSpeed);
+      console.log("down");
+      clearTimeout(reUp);
+      reUp=setTimeout(()=>{
+      this.moveSpeed=70;
+      console.log('reup!')
+      this.$socket.emit("speedDisplay", 0);
+      },2000);
+    }
+      this.$socket.emit("speedDisplay", 55-this.moveSpeed+15);
 
-console.log("down")
-      }
     },
     drawBackground:function(){
       var glShader = require('gl-shader');
@@ -162,7 +168,7 @@ console.log("down")
         //  plane.style.transform=` perspective(${pers}px) rotateX(${xdeg}deg) rotateY(${ydeg}deg) rotateZ(0deg)`;
         plane.style.transform=`translateX(${this.imgA.x}%)`
          plane2.style.transform=`translateX(${this.imgB.x}%)`
-       },12)
+       },10)
     },
    
   }
